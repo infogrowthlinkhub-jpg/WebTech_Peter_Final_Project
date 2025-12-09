@@ -1,0 +1,8 @@
+# Protect certificates directory
+# Only allow access through certificate.php
+
+<FilesMatch "\.(html|pdf)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
