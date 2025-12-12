@@ -1,0 +1,28 @@
+# NileTech Learning Website - Apache Configuration
+# Simplified configuration for XAMPP
+
+# Set default index page
+DirectoryIndex index.php index.html
+
+# Prevent directory listing
+Options -Indexes
+
+# Security headers (optional - may require mod_headers)
+<IfModule mod_headers.c>
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Content-Type-Options "nosniff"
+</IfModule>
+
+# Protect sensitive files (Apache 2.4+ syntax)
+# Note: This may cause issues if mod_authz_core is not enabled
+# Comment out if you get 403 errors
+<FilesMatch "\.(sql|log|ini|conf)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order Deny,Allow
+        Deny from all
+    </IfModule>
+</FilesMatch>
