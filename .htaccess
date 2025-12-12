@@ -1,0 +1,3 @@
+# Simple .htaccess for XAMPP
+DirectoryIndex index.php
+

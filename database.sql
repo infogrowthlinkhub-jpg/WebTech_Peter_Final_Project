@@ -18,7 +18,9 @@
 -- ============================================
 
 -- Create database if it doesn't exist
-CREATE DATABASE IF NOT EXISTS webtech_2025A_peter_mayen CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS webtech_2025A_peter_mayen 
+    DEFAULT CHARACTER SET utf8mb4 
+    DEFAULT COLLATE utf8mb4_unicode_ci;
 
 -- Use the database
 USE webtech_2025A_peter_mayen;
@@ -293,19 +295,19 @@ CREATE TABLE IF NOT EXISTS password_reset_tokens (
 -- ALTER TABLE password_reset_tokens ADD CONSTRAINT fk_password_reset_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
 -- ============================================
--- Certificates Table
+-- Certificates Table (DISABLED - Certificate functionality removed)
 -- ============================================
-CREATE TABLE IF NOT EXISTS certificates (
-    id INT(11) NOT NULL AUTO_INCREMENT,
-    user_id INT(11) NOT NULL,
-    module_id INT(11) NOT NULL,
-    certificate_path VARCHAR(255),
-    issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
-    UNIQUE KEY unique_user_module (user_id, module_id),
-    INDEX idx_user_id (user_id),
-    INDEX idx_module_id (module_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- CREATE TABLE IF NOT EXISTS certificates (
+--     id INT(11) NOT NULL AUTO_INCREMENT,
+--     user_id INT(11) NOT NULL,
+--     module_id INT(11) NOT NULL,
+--     certificate_path VARCHAR(255),
+--     issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     PRIMARY KEY (id),
+--     UNIQUE KEY unique_user_module (user_id, module_id),
+--     INDEX idx_user_id (user_id),
+--     INDEX idx_module_id (module_id)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Add foreign key constraint only if referenced table has correct structure
 -- Uncomment and run separately if you need foreign key constraint:

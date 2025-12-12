@@ -24,6 +24,15 @@ if (!$conn) {
 }
 
 // Check if user is admin
+// First check session variable for quick validation
+if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+    closeDBConnection($conn);
+    $_SESSION['error_message'] = 'Access denied. Admin privileges required.';
+    header('Location: ../index.php');
+    exit;
+}
+
+// Then verify with database for security (prevents session hijacking)
 $userId = $_SESSION['user_id'];
 if (!isAdmin($conn, $userId)) {
     closeDBConnection($conn);

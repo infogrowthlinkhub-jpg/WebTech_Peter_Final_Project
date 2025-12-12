@@ -3,7 +3,6 @@
 require_once __DIR__ . '/config/session.php';
 require_once __DIR__ . '/config/db.php';
 require_once __DIR__ . '/includes/functions.php';
-require_once __DIR__ . '/includes/certificate.php';
 
 // Get module and lesson slugs from URL
 $moduleSlug = isset($_GET['module']) ? trim($_GET['module']) : '';
@@ -82,15 +81,6 @@ if (isset($_POST['mark_complete'])) {
                     $updateStmt->bind_param("ii", $userId, $lessonId);
                     if ($updateStmt->execute()) {
                         $completionMessage = 'success';
-                        // Check if module is complete and generate certificate
-                        $lessonModuleStmt = $conn->prepare("SELECT module_id FROM lessons WHERE id = ? LIMIT 1");
-                        $lessonModuleStmt->bind_param("i", $lessonId);
-                        $lessonModuleStmt->execute();
-                        $lessonModuleResult = $lessonModuleStmt->get_result();
-                        if ($lessonModuleRow = $lessonModuleResult->fetch_assoc()) {
-                            checkAndGenerateCertificate($conn, $userId, $lessonModuleRow['module_id']);
-                        }
-                        $lessonModuleStmt->close();
                     }
                     $updateStmt->close();
                 }
@@ -100,15 +90,6 @@ if (isset($_POST['mark_complete'])) {
                     $insertStmt->bind_param("ii", $userId, $lessonId);
                     if ($insertStmt->execute()) {
                         $completionMessage = 'success';
-                        // Check if module is complete and generate certificate
-                        $lessonModuleStmt = $conn->prepare("SELECT module_id FROM lessons WHERE id = ? LIMIT 1");
-                        $lessonModuleStmt->bind_param("i", $lessonId);
-                        $lessonModuleStmt->execute();
-                        $lessonModuleResult = $lessonModuleStmt->get_result();
-                        if ($lessonModuleRow = $lessonModuleResult->fetch_assoc()) {
-                            checkAndGenerateCertificate($conn, $userId, $lessonModuleRow['module_id']);
-                        }
-                        $lessonModuleStmt->close();
                     }
                     $insertStmt->close();
                 }

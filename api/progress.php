@@ -16,7 +16,6 @@ if (empty($_SESSION['user_id'])) {
 
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../includes/functions.php';
-require_once __DIR__ . '/../includes/certificate.php';
 
 // Only accept POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -94,11 +93,6 @@ try {
             $lessonTitle = $lesson ? $lesson['title'] : 'Lesson';
             $notificationMessage = "Congratulations! You completed the lesson: {$lessonTitle} in {$moduleName}.";
             createNotification($conn, $userId, 'lesson_completed', $notificationMessage);
-            
-            // Check if module is complete and generate certificate
-            if ($lesson && isset($lesson['module_id'])) {
-                checkAndGenerateCertificate($conn, $userId, $lesson['module_id']);
-            }
             
             // Get completion statistics
             $statsStmt = $conn->prepare("

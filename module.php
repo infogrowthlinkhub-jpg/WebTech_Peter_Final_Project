@@ -293,32 +293,20 @@ try {
                     <strong>Completed:</strong> <?php echo count(array_filter($userProgress)); ?>
                 </p>
                 <?php
-                // Check if module is complete and show certificate link
+                // Check if module is complete
                 // Calculate progress from data we already have
                 $totalLessons = count($lessons);
                 $completedLessons = count(array_filter($userProgress));
                 $modulePercentage = $totalLessons > 0 ? round(($completedLessons / $totalLessons) * 100, 2) : 0;
                 
                 if ($modulePercentage >= 100):
-                    // Reopen database connection for certificate check (it was closed earlier)
-                    $conn = getDBConnection();
-                    require_once __DIR__ . '/includes/certificate.php';
-                    $certificate = getCertificate($conn, $userId, $module['id']);
-                    if ($certificate):
                 ?>
                     <div style="margin-top: 15px; padding: 15px; background: #d1fae5; border-radius: 8px; border-left: 4px solid #10b981;">
                         <p style="margin: 0; color: #065f46;">
-                            <strong>🏆 Module Complete!</strong> 
-                            <a href="certificate.php?module_id=<?php echo $module['id']; ?>" 
-                               style="color: #006994; text-decoration: none; font-weight: 600; margin-left: 10px;">
-                                Download Your Certificate →
-                            </a>
+                            <strong>🏆 Module Complete!</strong> Congratulations on completing this module!
                         </p>
                     </div>
                 <?php
-                    endif;
-                    // Close the connection we reopened
-                    closeDBConnection($conn);
                 endif;
                 ?>
             </div>

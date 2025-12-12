@@ -6,7 +6,6 @@
 require_once __DIR__ . '/config/session.php';
 require_once __DIR__ . '/config/db.php';
 require_once __DIR__ . '/includes/functions.php';
-require_once __DIR__ . '/includes/certificate.php';
 
 $errors = [];
 $successMessage = '';
@@ -124,9 +123,6 @@ while ($row = $result->fetch_assoc()) {
     $quizScores[] = $row;
 }
 $stmt->close();
-
-// Get user certificates
-$userCertificates = getUserCertificates($conn, $currentUserId);
 
 closeDBConnection($conn);
 
@@ -642,33 +638,6 @@ $completionPercentage = $stats['total_lessons'] > 0
             <?php endif; ?>
         </div>
 
-        <!-- Certificates Section -->
-        <div class="profile-card">
-            <h3>My Certificates</h3>
-            <?php if (empty($userCertificates)): ?>
-                <div style="padding: 40px; text-align: center; color: #666;">
-                    <p style="font-size: 1.1rem; margin-bottom: 10px;">🏆 No certificates yet</p>
-                    <p>Complete a module to earn your first certificate!</p>
-                </div>
-            <?php else: ?>
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
-                    <?php foreach ($userCertificates as $cert): ?>
-                        <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px; border-radius: 10px; border: 2px solid #006994; text-align: center;">
-                            <div style="font-size: 3rem; margin-bottom: 10px;">🏆</div>
-                            <h4 style="color: #006994; margin: 10px 0;"><?php echo htmlspecialchars($cert['module_name']); ?></h4>
-                            <p style="color: #666; font-size: 0.9rem; margin: 5px 0;">
-                                Issued: <?php echo formatDate($cert['issued_at']); ?>
-                            </p>
-                            <a href="certificate.php?module_id=<?php echo $cert['module_id']; ?>" 
-                               class="btn btn-primary" 
-                               style="margin-top: 15px; display: inline-block;">
-                                View Certificate
-                            </a>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
-        </div>
     </div>
 
     <footer class="footer">
