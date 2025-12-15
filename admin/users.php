@@ -19,6 +19,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $errors = [];
         
+        // SECURITY: Only super admin (peter.admin@nitech.com) can promote users to admin
+        $currentUserEmail = $currentUser['email'] ?? '';
+        $isSuperAdmin = ($currentUserEmail === 'peter.admin@nitech.com');
+        
+        // If trying to set role to admin, verify super admin access
+        if ($role === 'admin' && !$isSuperAdmin) {
+            $errors[] = 'Access denied. Only the super admin (peter.admin@nitech.com) can promote users to admin.';
+            $role = 'user'; // Force to user if not super admin
+        }
+        
+        // If editing and trying to change role to admin, verify super admin access
+        if ($action === 'edit' && $role === 'admin') {
+            // Get current user role from database
+            $currentRoleStmt = $conn->prepare("SELECT role FROM users WHERE id = ?");
+            $currentRoleStmt->bind_param("i", $userId);
+            $currentRoleStmt->execute();
+            $currentRoleResult = $currentRoleStmt->get_result();
+            $currentUserData = $currentRoleResult->fetch_assoc();
+            $currentRoleStmt->close();
+            
+            // If user is currently not admin and we're trying to make them admin
+            if (($currentUserData['role'] ?? 'user') !== 'admin' && !$isSuperAdmin) {
+                $errors[] = 'Access denied. Only the super admin (peter.admin@nitech.com) can promote users to admin.';
+                $role = 'user'; // Force to user if not super admin
+            }
+        }
+        
         if (empty($fullName)) {
             $errors[] = 'Full name is required.';
         }
@@ -207,10 +234,26 @@ require_once __DIR__ . '/includes/header.php';
             
             <div class="form-group">
                 <label for="role">Role *</label>
-                <select id="role" name="role" required>
-                    <option value="user" <?php echo ($editUser['role'] ?? 'user') === 'user' ? 'selected' : ''; ?>>User</option>
-                    <option value="admin" <?php echo ($editUser['role'] ?? '') === 'admin' ? 'selected' : ''; ?>>Admin</option>
+                <?php
+                // Only super admin can promote users to admin
+                $currentUserEmail = $currentUser['email'] ?? '';
+                $isSuperAdmin = ($currentUserEmail === 'peter.admin@nitech.com');
+                $currentRole = $editUser['role'] ?? 'user';
+                ?>
+                <select id="role" name="role" required <?php echo (!$isSuperAdmin && $currentRole !== 'admin') ? 'disabled' : ''; ?>>
+                    <option value="user" <?php echo $currentRole === 'user' ? 'selected' : ''; ?>>User</option>
+                    <option value="admin" <?php echo $currentRole === 'admin' ? 'selected' : ''; ?> <?php echo !$isSuperAdmin ? 'disabled' : ''; ?>>Admin</option>
                 </select>
+                <?php if (!$isSuperAdmin): ?>
+                    <small style="color: #f59e0b; display: block; margin-top: 5px;">
+                        ⚠️ Only the super admin (peter.admin@nitech.com) can promote users to admin.
+                    </small>
+                    <?php if ($currentRole === 'admin'): ?>
+                        <input type="hidden" name="role" value="admin">
+                    <?php else: ?>
+                        <input type="hidden" name="role" value="user">
+                    <?php endif; ?>
+                <?php endif; ?>
             </div>
             
             <div class="form-actions">

@@ -423,15 +423,26 @@ With hands-on experience in web development, digital literacy training, and comm
 -- ============================================
 
 -- ============================================
--- Create default admin user
--- Email: admin@niletech.com
+-- Create default admin user (Super Admin)
+-- Email: peter.admin@nitech.com (REQUIRED for admin access)
 -- Password: Admin@123 (change this immediately after first login!)
 -- ============================================
--- IMPORTANT: Change the password after first login!
--- Password hash for 'Admin@123' (generated with password_hash('Admin@123', PASSWORD_DEFAULT))
--- If you need to regenerate, use PHP: echo password_hash('Admin@123', PASSWORD_DEFAULT);
-INSERT IGNORE INTO users (full_name, email, password, role) 
-VALUES ('Admin User', 'admin@niletech.com', '$2y$10$TdvB3M0Ti1ErUZxqLE08cuCTga19nyz4W4fd.RtjhvSbP6rgtGuza', 'admin');
+-- IMPORTANT: 
+-- 1. This email MUST be exactly 'peter.admin@nitech.com' for admin access
+-- 2. Change the password after first login!
+-- 3. Password hash for 'Admin@123' (generated with password_hash('Admin@123', PASSWORD_DEFAULT))
+-- 4. To regenerate password hash, use PHP: echo password_hash('YourPassword', PASSWORD_DEFAULT);
+-- ============================================
+-- Delete old admin user if exists (with wrong email)
+DELETE FROM users WHERE email = 'admin@niletech.com' AND role = 'admin';
+
+-- Insert/Update super admin user with correct email
+INSERT INTO users (full_name, email, password, role) 
+VALUES ('Peter Admin', 'peter.admin@nitech.com', '$2y$10$TdvB3M0Ti1ErUZxqLE08cuCTga19nyz4W4fd.RtjhvSbP6rgtGuza', 'admin')
+ON DUPLICATE KEY UPDATE 
+    full_name = 'Peter Admin',
+    password = '$2y$10$TdvB3M0Ti1ErUZxqLE08cuCTga19nyz4W4fd.RtjhvSbP6rgtGuza',
+    role = 'admin';
 -- 
 -- Note: The above password hash is for 'Admin@123'
 -- To create a new admin password hash, use PHP: password_hash('YourPassword', PASSWORD_DEFAULT)

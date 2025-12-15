@@ -1,3 +1,38 @@
-# Simple .htaccess for XAMPP
-DirectoryIndex index.php
+# Apache Configuration for XAMPP - NileTech Learning Website
+# This ensures proper routing and prevents "Not Found" errors
+
+# Set default index file
+DirectoryIndex index.php index.html
+
+# Enable error reporting (remove in production)
+# php_flag display_errors On
+# php_value error_reporting E_ALL
+
+# Prevent directory listing
+Options -Indexes
+
+# Enable rewrite engine (if mod_rewrite is available)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Redirect trailing slashes (optional - helps with URL consistency)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_URI} !(.*)/$
+    RewriteRule ^(.*)$ $1/ [L,R=301]
+    
+    # Prevent access to sensitive files
+    RewriteRule ^(config|includes|logs|vendor)/.*$ - [F,L]
+</IfModule>
+
+# Set proper MIME types
+<IfModule mod_mime.c>
+    AddType application/javascript js
+    AddType text/css css
+</IfModule>
+
+# Security headers (optional but recommended)
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>
 

@@ -24,8 +24,13 @@ if (!$conn) {
 }
 
 // Check if user is admin
-// First check session variable for quick validation
-if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+// First check session variables for quick validation (both role and email)
+if (
+    !isset($_SESSION['user_role']) || 
+    $_SESSION['user_role'] !== 'admin' ||
+    !isset($_SESSION['user_email']) ||
+    $_SESSION['user_email'] !== 'peter.admin@nitech.com'
+) {
     closeDBConnection($conn);
     $_SESSION['error_message'] = 'Access denied. Admin privileges required.';
     header('Location: ../index.php');
@@ -53,6 +58,16 @@ if (!$currentUser) {
     closeDBConnection($conn);
     session_destroy();
     header('Location: ../login.php');
+    exit;
+}
+
+// Check if email is exactly peter.admin@nitech.com (strict admin email requirement)
+$userEmail = $currentUser['email'] ?? '';
+if ($userEmail !== 'peter.admin@nitech.com') {
+    closeDBConnection($conn);
+    $_SESSION['error_message'] = 'Access denied. Only the super admin (peter.admin@nitech.com) can access the admin panel.';
+    session_destroy();
+    header('Location: ../index.php');
     exit;
 }
 ?>

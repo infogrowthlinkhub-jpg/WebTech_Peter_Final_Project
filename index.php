@@ -13,7 +13,12 @@ if (session_status() === PHP_SESSION_NONE) {
 $isLoggedIn = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 $currentUserName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : '';
 $userRole = isset($_SESSION['user_role']) ? $_SESSION['user_role'] : 'user';
-$isAdmin = ($userRole === 'admin');
+$userEmail = isset($_SESSION['user_email']) ? $_SESSION['user_email'] : '';
+// Only show admin panel link if user is admin AND has the specific admin email
+$isAdmin = (
+    $userRole === 'admin' &&
+    $userEmail === 'peter.admin@nitech.com'
+);
 ?>
 <!DOCTYPE html>
 <html lang="en">

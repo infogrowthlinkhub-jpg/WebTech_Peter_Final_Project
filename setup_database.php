@@ -114,6 +114,24 @@ try {
         echo "Lessons: <code>$lessonCount</code>";
         echo "</div>";
         
+        // Check for admin user with correct email
+        $adminEmail = 'peter.admin@nitech.com';
+        $adminCheck = $conn->prepare("SELECT id, full_name, email FROM users WHERE email = ? AND role = 'admin'");
+        $adminCheck->bind_param("s", $adminEmail);
+        $adminCheck->execute();
+        $adminResult = $adminCheck->get_result();
+        $adminUser = $adminResult->fetch_assoc();
+        $adminCheck->close();
+        
+        if ($adminUser) {
+            echo "<div class='success' style='margin-top: 10px;'>✅ Admin user found: <code>{$adminEmail}</code></div>";
+        } else {
+            echo "<div class='error' style='margin-top: 10px;'>⚠️ Admin user with email <code>{$adminEmail}</code> not found!</div>";
+            echo "<div class='info' style='margin-top: 10px;'>";
+            echo "<strong>Solution:</strong> Run <a href='setup-admin-user.php' style='color: white; text-decoration: underline;'><strong>setup-admin-user.php</strong></a> to create/update the admin user.";
+            echo "</div>";
+        }
+        
         if ($moduleCount == 0 || $lessonCount == 0) {
             echo "<div class='error' style='margin-top: 10px;'>⚠️ No modules or lessons found. Please import <code>database.sql</code> to populate data.</div>";
         }

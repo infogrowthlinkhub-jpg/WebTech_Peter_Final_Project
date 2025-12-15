@@ -140,10 +140,12 @@ if (empty($errors)) {
         `full_name` VARCHAR(100) NOT NULL,
         `email` VARCHAR(100) NOT NULL UNIQUE,
         `password` VARCHAR(255) NOT NULL,
+        `role` ENUM('user', 'admin') DEFAULT 'user',
         `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (`id`),
-        INDEX `idx_email` (`email`)
+        INDEX `idx_email` (`email`),
+        INDEX `idx_role` (`role`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
     
     if ($conn->query($createUsersTable)) {
@@ -166,7 +168,7 @@ if (empty($errors)) {
         
         // Check columns
         $columns = $conn->query("SHOW COLUMNS FROM users");
-        $requiredColumns = ['id', 'full_name', 'email', 'password', 'created_at'];
+        $requiredColumns = ['id', 'full_name', 'email', 'password', 'role', 'created_at'];
         $foundColumns = [];
         
         while ($row = $columns->fetch_assoc()) {
@@ -174,6 +176,14 @@ if (empty($errors)) {
         }
         
         $missingColumns = array_diff($requiredColumns, $foundColumns);
+        
+        // Add missing role column if needed
+        if (in_array('role', $missingColumns)) {
+            $conn->query("ALTER TABLE users ADD COLUMN role ENUM('user', 'admin') DEFAULT 'user' AFTER password, ADD INDEX idx_role (role)");
+            echo "<div class='success'>✅ Added missing 'role' column!</div>";
+            $foundColumns[] = 'role';
+            $missingColumns = array_diff($requiredColumns, $foundColumns);
+        }
         
         if (empty($missingColumns)) {
             echo "<div class='success'>✅ All required columns exist!</div>";
@@ -204,6 +214,21 @@ if (empty($errors)) {
             if ($testQuery) {
                 $count = $testQuery->fetch_assoc()['count'];
                 echo "<div class='info'>📊 Current users in database: <code>$count</code></div>";
+            }
+            
+            // Check for admin user
+            $adminEmail = 'peter.admin@nitech.com';
+            $adminCheck = $testConn->prepare("SELECT id, full_name FROM users WHERE email = ? AND role = 'admin'");
+            $adminCheck->bind_param("s", $adminEmail);
+            $adminCheck->execute();
+            $adminResult = $adminCheck->get_result();
+            $adminUser = $adminResult->fetch_assoc();
+            $adminCheck->close();
+            
+            if ($adminUser) {
+                echo "<div class='success'>✅ Admin user found: <code>{$adminEmail}</code></div>";
+            } else {
+                echo "<div class='warning'>⚠️ Admin user not found. Run <a href='setup-admin-user.php' style='color: #f59e0b; text-decoration: underline;'><strong>setup-admin-user.php</strong></a> to create it.</div>";
             }
             
             closeDBConnection($testConn);

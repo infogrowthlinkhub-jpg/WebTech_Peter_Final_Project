@@ -7,7 +7,14 @@
 session_start();
 
 // If admin is already logged in, redirect to admin dashboard
-if (isset($_SESSION['user_id']) && isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') {
+// Check both role and email for security
+if (
+    isset($_SESSION['user_id']) && 
+    isset($_SESSION['user_role']) && 
+    $_SESSION['user_role'] === 'admin' &&
+    isset($_SESSION['user_email']) &&
+    $_SESSION['user_email'] === 'peter.admin@nitech.com'
+) {
     header('Location: index.php');
     exit();
 }
@@ -43,11 +50,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conn = getDBConnection();
         
         if ($conn) {
+            // Check if email ends with .admin@nitech.com (strict requirement)
+            $emailLower = strtolower($email);
+            if (!str_ends_with($emailLower, '.admin@nitech.com')) {
+                $errors['email'] = 'Only users with .admin@nitech.com email addresses can access the admin panel.';
+            }
+            
             // Prepare statement to fetch user by email - ONLY ADMINS
             $loginQuery = "SELECT id, full_name, email, password, role FROM users WHERE email = ? AND role = 'admin' LIMIT 1";
             $stmt = $conn->prepare($loginQuery);
             
-            if ($stmt) {
+            if ($stmt && empty($errors)) {
                 $stmt->bind_param("s", $email);
                 $stmt->execute();
                 $result = $stmt->get_result();
@@ -56,27 +69,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Admin user found, verify password
                     $user = $result->fetch_assoc();
                     
+                    // Double-check email requirement - must be exactly peter.admin@nitech.com
+                    if ($user['email'] !== 'peter.admin@nitech.com') {
+                        $errors['email'] = 'Access denied. Only the super admin (peter.admin@nitech.com) can access the admin panel.';
+                    }
+                    
                     // Verify password using password_verify()
-                    if (password_verify($password, $user['password'])) {
+                    if (empty($errors) && password_verify($password, $user['password'])) {
                         // Password is correct - Login successful
-                        
-                        // Start session and store user data
-                        $_SESSION['user_id'] = $user['id'];
-                        $_SESSION['user_name'] = $user['full_name'];
-                        $_SESSION['user_email'] = $user['email'];
-                        $_SESSION['user_role'] = $user['role'];
-                        $_SESSION['logged_in'] = true;
-                        
-                        // Regenerate session ID for security
-                        session_regenerate_id(true);
-                        
-                        // Close statement and connection
-                        $stmt->close();
-                        closeDBConnection($conn);
-                        
-                        // Redirect to admin dashboard
-                        header('Location: index.php');
-                        exit();
+                        // Verify both role and email before allowing admin access
+                        if (
+                            $user['role'] === 'admin' &&
+                            $user['email'] === 'peter.admin@nitech.com'
+                        ) {
+                            // Start session and store user data
+                            $_SESSION['user_id'] = $user['id'];
+                            $_SESSION['user_name'] = $user['full_name'];
+                            $_SESSION['user_email'] = $user['email'];
+                            $_SESSION['user_role'] = $user['role'];
+                            $_SESSION['logged_in'] = true;
+                            
+                            // Regenerate session ID for security
+                            session_regenerate_id(true);
+                            
+                            // Close statement and connection
+                            $stmt->close();
+                            closeDBConnection($conn);
+                            
+                            // Redirect to admin dashboard
+                            header('Location: index.php');
+                            exit();
+                        } else {
+                            $errors['email'] = 'Access denied. Only the super admin (peter.admin@nitech.com) can access the admin panel.';
+                        }
                     } else {
                         // Password is incorrect
                         $errors['password'] = 'Invalid email or password. Please try again.';

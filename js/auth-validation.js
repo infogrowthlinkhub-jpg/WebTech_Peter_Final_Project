@@ -64,6 +64,9 @@ function validateField(input, errorElement, validator, errorMessage) {
 const signupForm = document.getElementById('signupForm');
 
 if (signupForm) {
+    // Note: All users are created with role = 'user' by default
+    // Admin roles can only be assigned by the super admin (peter.admin@nitech.com)
+    // This is enforced server-side in signup.php
     const fullNameInput = document.getElementById('fullName');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
