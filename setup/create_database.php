@@ -258,7 +258,7 @@ if (empty($errors)) {
     echo "</ul>";
     echo "<p><strong>Next steps:</strong></p>";
     echo "<ol>";
-    echo "<li>Go to <a href='signup.php' class='btn'>Sign Up</a> to create your first account</li>";
+                echo "<li>Go to <a href='../pages/signup.php' class='btn'>Sign Up</a> to create your first account</li>";
     echo "<li>Or import the full <code>database.sql</code> for complete setup (modules, lessons, etc.)</li>";
     echo "</ol>";
 } else {

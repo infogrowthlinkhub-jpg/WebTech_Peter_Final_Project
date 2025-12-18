@@ -106,7 +106,7 @@ function getDBConnection() {
                             <li>Database <code><?php echo DB_NAME; ?></code> exists</li>
                             <li>Database credentials are correct in <code>config/db.php</code></li>
                         </ul>
-                        <a href="setup_database.php" class="btn">Setup & Verify Database</a>
+                        <a href="../setup/setup_database.php" class="btn">Setup & Verify Database</a>
                     </div>
                 </body>
                 </html>

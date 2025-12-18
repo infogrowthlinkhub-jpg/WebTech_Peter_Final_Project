@@ -121,8 +121,8 @@
         <h2>🚀 Quick Actions</h2>
         <a href="index.php" class="btn">Go to Homepage</a>
         <a href="login.php" class="btn">Go to Login</a>
-        <a href="setup_database.php" class="btn">Setup Database</a>
-        <a href="test.php" class="btn">Test Page</a>
+        <a href="../setup/setup_database.php" class="btn">Setup Database</a>
+        <a href="../utils/test.php" class="btn">Test Page</a>
     </div>
 
     <div class="box">

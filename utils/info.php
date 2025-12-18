@@ -12,7 +12,7 @@ echo "<p><strong>Request URI:</strong> " . ($_SERVER['REQUEST_URI'] ?? 'N/A') . 
 echo "<p><strong>Document Root:</strong> " . ($_SERVER['DOCUMENT_ROOT'] ?? 'N/A') . "</p>";
 
 echo "<h2>File Check:</h2>";
-$files = ['index.php', 'test.php', 'login.php', 'config/db.php'];
+$files = ['../index.php', '../utils/test.php', '../pages/login.php', '../config/db.php'];
 foreach ($files as $file) {
     $exists = file_exists($file);
     $color = $exists ? 'green' : 'red';
@@ -32,7 +32,7 @@ if (function_exists('apache_get_modules')) {
 }
 
 echo "<h2>Links:</h2>";
-echo "<p><a href='index.php'>Go to Index Page</a></p>";
+echo "<p><a href='../index.php'>Go to Index Page</a></p>";
 echo "<p><a href='test.php'>Go to Test Page</a></p>";
 ?>
 

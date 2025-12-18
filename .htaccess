@@ -15,13 +15,18 @@ Options -Indexes
 <IfModule mod_rewrite.c>
     RewriteEngine On
     
+    # Route main pages to pages/ folder (except index.php which stays at root)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(login|signup|dashboard|profile|lesson|module|mentorship|book-mentor|my-bookings|feedback|forgot-password|reset-password|logout|diagnostic|diagnostic-url)\.php$ pages/$1.php [L]
+    
     # Redirect trailing slashes (optional - helps with URL consistency)
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_URI} !(.*)/$
     RewriteRule ^(.*)$ $1/ [L,R=301]
     
     # Prevent access to sensitive files
-    RewriteRule ^(config|includes|logs|vendor)/.*$ - [F,L]
+    RewriteRule ^(config|includes|logs|vendor|setup|utils|database|docs)/.*$ - [F,L]
 </IfModule>
 
 # Set proper MIME types

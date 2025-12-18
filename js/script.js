@@ -135,7 +135,7 @@ if (submitFeedbackBtn) {
             setTimeout(() => {
                 this.style.transform = '';
                 // Redirect to login page if not logged in, otherwise to feedback
-                window.location.href = 'login.php?redirect=feedback.php';
+                window.location.href = 'pages/login.php?redirect=pages/feedback.php';
             }, 150);
         } else {
             // If it's a link, allow it to navigate naturally

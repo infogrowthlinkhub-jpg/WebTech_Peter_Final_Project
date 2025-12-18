@@ -333,7 +333,7 @@ $testUrl = "{$baseUrl}/test.php";
                 <h2>🎯 Next Steps</h2>
                 <a href="<?php echo htmlspecialchars($testUrl); ?>" class="btn" target="_blank">Test PHP</a>
                 <a href="<?php echo htmlspecialchars($indexUrl); ?>" class="btn" target="_blank">Go to Homepage</a>
-                <a href="check.php" class="btn" target="_blank">Full System Check</a>
+                <a href="../utils/check.php" class="btn" target="_blank">Full System Check</a>
             </div>
         </div>
     </div>

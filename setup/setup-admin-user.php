@@ -364,7 +364,7 @@ if (empty($errors)) {
     echo "</ul>";
     echo "<p><strong>Next Steps:</strong></p>";
     echo "<ol>";
-    echo "<li>Go to <a href='login.php' class='btn'>Login Page</a> and log in with the admin credentials</li>";
+    echo "<li>Go to <a href='../pages/login.php' class='btn'>Login Page</a> and log in with the admin credentials</li>";
     echo "<li><strong>CHANGE THE PASSWORD</strong> immediately after first login!</li>";
     echo "<li>Access the <a href='admin/index.php' class='btn btn-success'>Admin Panel</a> (after login)</li>";
     echo "</ol>";

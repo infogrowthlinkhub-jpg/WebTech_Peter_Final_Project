@@ -103,11 +103,11 @@ header('Content-Type: text/html; charset=UTF-8');
         <h2>🌐 Correct URLs to Access Your Site</h2>
         <p><strong>Use these exact URLs:</strong></p>
         <ul>
-            <li><strong>Homepage:</strong> <a href="index.php" target="_blank">http://localhost/Final_Project_webTech_Peter/index.php</a></li>
+            <li><strong>Homepage:</strong> <a href="../index.php" target="_blank">http://localhost/Final_Project_webTech_Peter/index.php</a></li>
             <li><strong>Homepage (short):</strong> <a href="/Final_Project_webTech_Peter/" target="_blank">http://localhost/Final_Project_webTech_Peter/</a></li>
-            <li><strong>Login:</strong> <a href="login.php" target="_blank">http://localhost/Final_Project_webTech_Peter/login.php</a></li>
-            <li><strong>Signup:</strong> <a href="signup.php" target="_blank">http://localhost/Final_Project_webTech_Peter/signup.php</a></li>
-            <li><strong>Diagnostic:</strong> <a href="diagnostic.php" target="_blank">http://localhost/Final_Project_webTech_Peter/diagnostic.php</a></li>
+            <li><strong>Login:</strong> <a href="../pages/login.php" target="_blank">http://localhost/Final_Project_webTech_Peter/login.php</a></li>
+            <li><strong>Signup:</strong> <a href="../pages/signup.php" target="_blank">http://localhost/Final_Project_webTech_Peter/signup.php</a></li>
+            <li><strong>Diagnostic:</strong> <a href="../pages/diagnostic.php" target="_blank">http://localhost/Final_Project_webTech_Peter/diagnostic.php</a></li>
         </ul>
         <p class="warning"><strong>⚠ Important:</strong> Make sure the folder name is exactly: <code>Final_Project_webTech_Peter</code></p>
     </div>
@@ -133,11 +133,11 @@ header('Content-Type: text/html; charset=UTF-8');
 
     <div class="box">
         <h2>🚀 Quick Navigation</h2>
-        <a href="index.php" class="btn">Go to Homepage</a>
-        <a href="login.php" class="btn">Go to Login</a>
-        <a href="signup.php" class="btn">Go to Signup</a>
-        <a href="setup_database.php" class="btn">Setup Database</a>
-        <a href="diagnostic.php" class="btn">Full Diagnostic</a>
+        <a href="../index.php" class="btn">Go to Homepage</a>
+        <a href="../pages/login.php" class="btn">Go to Login</a>
+        <a href="../pages/signup.php" class="btn">Go to Signup</a>
+        <a href="../setup/setup_database.php" class="btn">Setup Database</a>
+        <a href="../pages/diagnostic.php" class="btn">Full Diagnostic</a>
     </div>
 
     <div class="box">

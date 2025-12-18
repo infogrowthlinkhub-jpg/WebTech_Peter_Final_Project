@@ -155,7 +155,7 @@ echo "</div><div class='step'><h2>📋 Summary</h2>";
 
 if (empty($errors)) {
     echo "<div class='success'><strong>✅ All checks passed! Your database is set up correctly.</strong></div>";
-    echo "<p>You can now:</p><ul><li>Go to <a href='signup.php'>Sign Up</a> to create an account</li><li>Go to <a href='login.php'>Login</a> if you already have an account</li></ul>";
+    echo "<p>You can now:</p><ul><li>Go to <a href='../pages/signup.php'>Sign Up</a> to create an account</li><li>Go to <a href='../pages/login.php'>Login</a> if you already have an account</li></ul>";
 } else {
     echo "<div class='error'><strong>❌ Issues found. Please fix them before proceeding.</strong></div>";
     echo "<h3>How to Fix:</h3>";
